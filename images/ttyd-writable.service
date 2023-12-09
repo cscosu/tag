@@ -1,0 +1,13 @@
+[Unit]
+Description=ttyd writable web terminal
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/autotag.env
+ExecStart=/usr/bin/ttyd.x86_64 -p 7681 -c admin:${TTYD_PASSWORD} -W tmux new -A -s ttyd
+WorkingDirectory=/home/admin
+Restart=always
+User=admin
+
+[Install]
+WantedBy=default.target

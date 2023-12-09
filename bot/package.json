@@ -1,0 +1,19 @@
+{
+  "name": "bot",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run index.ts",
+    "dev": "bun run --watch index.ts"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@kubernetes/client-node": "1.0.0-rc3",
+    "discord.js": "^14.14.1"
+  }
+}

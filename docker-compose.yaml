@@ -1,0 +1,26 @@
+services:
+  tag1:
+    build:
+      context: images
+      dockerfile: Dockerfile.archlinux
+    privileged: true
+    ports:
+      - "1001:7681"
+      - "1002:7682"
+    volumes:
+      - ./autotag1.env:/etc/autotag.env
+  tag2:
+    build:
+      context: images
+      dockerfile: Dockerfile.archlinux
+    privileged: true
+    ports:
+      - "2001:7681"
+      - "2002:7682"
+    volumes:
+      - ./autotag2.env:/etc/autotag.env
+  observer:
+    build:
+      context: observer
+    ports:
+      - "3000:80"

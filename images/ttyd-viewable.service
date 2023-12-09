@@ -1,0 +1,12 @@
+[Unit]
+Description=ttyd viewable web terminal
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ttyd.x86_64 -p 7682 tmux new -A -s ttyd
+WorkingDirectory=/home/admin
+Restart=always
+User=admin
+
+[Install]
+WantedBy=default.target
