@@ -27,6 +27,8 @@ interface Command extends ChatInputApplicationCommandData {
   autocomplete?: (interaction: AutocompleteInteraction) => Promise<void>;
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 const createKubernetesResources = async (
   id: string,
   password: string,
@@ -158,7 +160,7 @@ const createKubernetesResources = async (
     },
   });
 
-  await k8sCore.createNamespacedPod({
+  let pod = await k8sCore.createNamespacedPod({
     namespace: "tag",
     body: {
       metadata: {
@@ -214,6 +216,14 @@ const createKubernetesResources = async (
       },
     },
   });
+
+  do {
+    pod = await k8sCore.readNamespacedPod({
+      name: id,
+      namespace: "tag",
+    });
+    sleep(1000);
+  } while (pod.status?.phase !== "Running");
 };
 
 const startTagCommand: Command = {
