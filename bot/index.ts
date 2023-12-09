@@ -7,6 +7,7 @@ import {
   Events,
   GatewayIntentBits,
   GuildMemberRoleManager,
+  User,
 } from "discord.js";
 import * as k8s from "@kubernetes/client-node";
 import { randomBytes } from "node:crypto";
@@ -26,14 +27,18 @@ interface Command extends ChatInputApplicationCommandData {
   autocomplete?: (interaction: AutocompleteInteraction) => Promise<void>;
 }
 
-const createKubernetesResources = async (id: string, password: string) => {
+const createKubernetesResources = async (
+  id: string,
+  password: string,
+  image: string
+) => {
   await k8sCore.createNamespacedService({
     namespace: "tag",
     body: {
       metadata: {
-        name: `${id}-writable`,
+        name: `tag-${id}-writable`,
         labels: {
-          app: `${id}-writable`,
+          app: `tag-${id}-writable`,
           tag: "true",
         },
       },
@@ -58,9 +63,9 @@ const createKubernetesResources = async (id: string, password: string) => {
     namespace: "tag",
     body: {
       metadata: {
-        name: `${id}-viewable`,
+        name: `tag-${id}-viewable`,
         labels: {
-          app: `${id}-viewable`,
+          app: `tag-${id}-viewable`,
           tag: "true",
         },
       },
@@ -105,7 +110,7 @@ const createKubernetesResources = async (id: string, password: string) => {
                   pathType: "Prefix",
                   backend: {
                     service: {
-                      name: `${id}-viewable`,
+                      name: `tag-${id}-viewable`,
                       port: {
                         name: "viewable",
                       },
@@ -117,7 +122,7 @@ const createKubernetesResources = async (id: string, password: string) => {
                   pathType: "Prefix",
                   backend: {
                     service: {
-                      name: `${id}-writable`,
+                      name: `tag-${id}-writable`,
                       port: {
                         name: "writable",
                       },
@@ -177,7 +182,7 @@ const createKubernetesResources = async (id: string, password: string) => {
         containers: [
           {
             name: "workspace",
-            image: "ghcr.io/cscosu/tag-archlinux:latest",
+            image: `ghcr.io/cscosu/tag-${image}:latest`,
             imagePullPolicy: "Always",
             volumeMounts: [
               {
@@ -225,17 +230,20 @@ const startTagCommand: Command = {
           name: "player1",
           type: ApplicationCommandOptionType.User,
           description: "The first player",
+          required: true,
         },
         {
           name: "player2",
           type: ApplicationCommandOptionType.User,
           description: "The second player",
+          required: true,
         },
         {
           name: "image",
           type: ApplicationCommandOptionType.String,
           choices: [{ name: "Arch Linux", value: "archlinux" }],
           description: "The image to use",
+          required: true,
         },
       ],
     },
@@ -311,16 +319,31 @@ const startTagCommand: Command = {
     }
 
     if (interaction.options.data.some((option) => option.name === "start")) {
+      const image = interaction.options.get("image")?.value as string;
       const password1 = randomBytes(4).toString("hex");
       const password2 = randomBytes(4).toString("hex");
 
       await Promise.all([
-        createKubernetesResources("tag1", password1),
-        createKubernetesResources("tag2", password2),
+        createKubernetesResources("1", password1, image),
+        createKubernetesResources("2", password2, image),
       ]);
 
+      const connectUrl1 = `https://admin:${password1}@tag.osucyber.club/1`;
+      const connectUrl2 = `https://admin:${password2}@tag.osucyber.club/2`;
+
+      const player1 = interaction.options.getUser("player1") as User;
+      const player2 = interaction.options.getUser("player2") as User;
+
+      player1.send({
+        content: `Your tag game is accessible at ${connectUrl1}\nWhen you switch, go to ${connectUrl2}`,
+      });
+      player2.send({
+        content: `Your tag game is accessible at ${connectUrl2}\nWhen you switch, go to ${connectUrl1}`,
+      });
+
       await interaction.editReply({
-        content: "Thanos carpet",
+        content: `Tag game created! Spectate at https://tag.osucyber.club\n\n<@${player1.id}> ${connectUrl1}\n<@${player2.id}> ${connectUrl2}`,
+        allowedMentions: { parse: [] },
       });
     }
   },
