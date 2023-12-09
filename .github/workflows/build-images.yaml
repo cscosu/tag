@@ -15,6 +15,7 @@ jobs:
           echo "matrix=$(find images -type f -name 'Dockerfile.*' | awk -F'.' '{print $2}' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
   push-ghcr:
+    needs: list
     name: Build and push image
     runs-on: ubuntu-22.04
     permissions:
