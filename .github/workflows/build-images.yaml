@@ -45,12 +45,12 @@ jobs:
       - name: Build image
         run: |
           docker build \
-            --tag ghcr.io/${{ github.repository_owner }}/tag-:${{ matrix.chal }}:${{ steps.vars.outputs.date }} \
-            --tag ghcr.io/${{ github.repository_owner }}/tag-:${{ matrix.chal }}:latest \
+            --tag ghcr.io/${{ github.repository_owner }}/tag-${{ matrix.chal }}:${{ steps.vars.outputs.date }} \
+            --tag ghcr.io/${{ github.repository_owner }}/tag-${{ matrix.chal }}:latest \
             --file images/Dockerfile.${{ matrix.chal }} \
             images
 
       - name: Push to ghcr
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/tag-:${{ matrix.chal }}:${{ steps.vars.outputs.date }}
-          docker push ghcr.io/${{ github.repository_owner }}/tag-:${{ matrix.chal }}:latest
+          docker push ghcr.io/${{ github.repository_owner }}/tag-${{ matrix.chal }}:${{ steps.vars.outputs.date }}
+          docker push ghcr.io/${{ github.repository_owner }}/tag-${{ matrix.chal }}:latest
