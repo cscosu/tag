@@ -29,11 +29,11 @@ jobs:
       - name: Build image
         run: |
           docker build \
-            --tag ghcr.io/${{ github.repository_owner }}/tag-observer-${{ steps.vars.outputs.date }} \
-            --tag ghcr.io/${{ github.repository_owner }}/tag-observer-latest \
+            --tag ghcr.io/${{ github.repository_owner }}/tag-observer:${{ steps.vars.outputs.date }} \
+            --tag ghcr.io/${{ github.repository_owner }}/tag-observer:latest \
             observer
 
       - name: Push to ghcr
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/tag-observer-${{ steps.vars.outputs.date }}
-          docker push ghcr.io/${{ github.repository_owner }}/tag-observer-latest
+          docker push ghcr.io/${{ github.repository_owner }}/tag-observer:${{ steps.vars.outputs.date }}
+          docker push ghcr.io/${{ github.repository_owner }}/tag-observer:latest
