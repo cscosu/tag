@@ -3,7 +3,8 @@ Description=ttyd viewable web terminal
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/ttyd.x86_64 -p 7682 tmux new -A -s ttyd
+EnvironmentFile=/etc/autotag.env
+ExecStart=/usr/bin/ttyd.x86_64 -p 7682 -b /${TTYD_ID}/view tmux new -A -s ttyd
 WorkingDirectory=/home/admin
 Restart=always
 User=admin

@@ -148,7 +148,7 @@ const createKubernetesResources = async (id: string, password: string) => {
         },
       },
       data: {
-        "autotag.env": `TTYD_PASSWORD=${password}`,
+        "autotag.env": `TTYD_ID=${id}\nTTYD_PASSWORD=${password}\n`,
       },
     },
   });
@@ -230,6 +230,12 @@ const startTagCommand: Command = {
           name: "player2",
           type: ApplicationCommandOptionType.User,
           description: "The second player",
+        },
+        {
+          name: "image",
+          type: ApplicationCommandOptionType.String,
+          choices: [{ name: "Arch Linux", value: "archlinux" }],
+          description: "The image to use",
         },
       ],
     },
