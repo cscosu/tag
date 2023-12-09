@@ -7,7 +7,7 @@ RUN systemctl set-default multi-user.target
 RUN useradd --create-home --shell /bin/bash admin && echo "admin:admin" | chpasswd
 RUN usermod -aG wheel admin
 
-RUN pacman -Syu --noconfirm wget tmux sudo neofetch
+RUN pacman -Syu --noconfirm wget tmux sudo neofetch vim
 RUN sed -i 's/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
 
 RUN wget https://github.com/tsl0922/ttyd/releases/download/1.7.4/ttyd.x86_64 -O /usr/bin/ttyd.x86_64

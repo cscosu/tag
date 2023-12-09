@@ -174,7 +174,7 @@ const createKubernetesResources = async (
       },
       spec: {
         runtimeClassName: "sysbox-runc",
-        hostname: "cscosu",
+        hostname: `tag-${id}`,
         dnsPolicy: "None",
         dnsConfig: {
           nameservers: ["1.1.1.1"],
