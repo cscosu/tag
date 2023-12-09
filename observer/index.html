@@ -35,5 +35,13 @@
         frameborder="0"
       ></iframe>
     </div>
+    <script>
+      document.querySelectorAll(".terminal").forEach((terminal) => {
+        const viewport =
+          terminal.contentWindow.document.querySelector(".xterm-viewport");
+        if (!viewport) return;
+        viewport.style.overflow = "hidden";
+      });
+    </script>
   </body>
 </html>
