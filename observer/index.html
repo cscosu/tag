@@ -36,11 +36,15 @@
       ></iframe>
     </div>
     <script>
-      document.querySelectorAll(".terminal").forEach((terminal) => {
-        const viewport =
-          terminal.contentWindow.document.querySelector(".xterm-viewport");
-        if (!viewport) return;
-        viewport.style.overflow = "hidden";
+      document.querySelectorAll(".terminal").forEach((terminalIFrame) => {
+        terminalIFrame.addEventListener("load", () => {
+          const styleSheet =
+            terminalIFrame.contentWindow.document.styleSheets[0];
+          styleSheet.insertRule(
+            ".xterm-viewport { overflow: hidden !important; }",
+            styleSheet.cssRules.length
+          );
+        });
       });
     </script>
   </body>
