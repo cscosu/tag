@@ -7,7 +7,7 @@ RUN systemctl set-default multi-user.target
 RUN useradd --create-home --shell /bin/bash admin && echo "admin:admin" | chpasswd
 RUN usermod -aG wheel admin
 
-RUN pacman -Syu --noconfirm wget apache php php-apache tmux sudo neofetch vim vi nano openssh cronie which python gcc make zip unzip npm
+RUN pacman -Syu --noconfirm wget apache php php-apache tmux sudo neofetch vim vi nano openssh cronie which python gcc make zip unzip npm less
 RUN sed -i 's/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
 
 RUN sed -i 's/LoadModule mpm_event_module/#LoadModule mpm_event_module/g' /etc/httpd/conf/httpd.conf \
