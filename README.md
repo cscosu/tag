@@ -11,7 +11,7 @@ Play tag in the browser!
 - The players then switch computers and try to find the backdoors installed by the other player and remove them in again 7 minutes
 - Points are scored for each backdoor that was installed which still remained
   - What counts as a backdoor is at the discretion of the adjudicator
-  - In general backdoors can be privaledge escalation, remote access, other persistence, etc.
+  - In general backdoors can be privilege escalation, remote access, other persistence, etc.
   - The players should not render the their own computer unusable before switching (don't lock root user, completely destroy config files, etc.)
 
 ## Usage

@@ -1,0 +1,10 @@
+services:
+  archlinux:
+    build:
+      dockerfile: Dockerfile.archlinux
+    privileged: true
+    ports:
+      - "1001:7681"
+      - "1002:7682"
+    volumes:
+      - ./autotag1.env:/etc/autotag.env

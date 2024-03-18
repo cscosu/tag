@@ -7,8 +7,19 @@ RUN systemctl set-default multi-user.target
 RUN useradd --create-home --shell /bin/bash admin && echo "admin:admin" | chpasswd
 RUN usermod -aG wheel admin
 
-RUN pacman -Syu --noconfirm wget tmux sudo neofetch vim
+RUN pacman -Syu --noconfirm wget apache php php-apache tmux sudo neofetch vim vi nano openssh cronie which python gcc make zip unzip npm
 RUN sed -i 's/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
+
+RUN sed -i 's/LoadModule mpm_event_module/#LoadModule mpm_event_module/g' /etc/httpd/conf/httpd.conf \
+    && sed -i 's/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/g' /etc/httpd/conf/httpd.conf \
+    && echo "LoadModule php_module modules/libphp.so" >> /etc/httpd/conf/httpd.conf \
+    && echo "AddHandler php-script .php" >> /etc/httpd/conf/httpd.conf \
+    && echo "Include conf/extra/php_module.conf" >> /etc/httpd/conf/httpd.conf \
+    && echo "DirectoryIndex index.php index.html" >> /etc/httpd/conf/httpd.conf
+
+RUN systemctl enable httpd
+RUN systemctl enable sshd
+RUN systemctl enable cronie
 
 RUN wget https://github.com/tsl0922/ttyd/releases/download/1.7.4/ttyd.x86_64 -O /usr/bin/ttyd.x86_64
 RUN chmod +x /usr/bin/ttyd.x86_64
