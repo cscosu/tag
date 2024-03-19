@@ -21,6 +21,8 @@ RUN systemctl enable httpd
 RUN systemctl enable sshd
 RUN systemctl enable cronie
 
+RUN sudo curl -L https://github.com/lemnos/tt/releases/download/v0.4.2/tt-linux -o /usr/local/bin/tt && sudo chmod +x /usr/local/bin/tt
+
 RUN wget https://github.com/tsl0922/ttyd/releases/download/1.7.4/ttyd.x86_64 -O /usr/bin/ttyd.x86_64
 RUN chmod +x /usr/bin/ttyd.x86_64
 
